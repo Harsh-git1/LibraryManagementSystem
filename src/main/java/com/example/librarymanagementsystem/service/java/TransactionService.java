@@ -12,6 +12,8 @@ import com.example.librarymanagementsystem.repository.java.StudentRepository;
 import com.example.librarymanagementsystem.repository.java.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,6 +29,8 @@ public class TransactionService {
 
     @Autowired
     BookRepository bookRepository;
+    @Autowired
+    JavaMailSender javaMailSender;
 
     @Autowired
     TransactionRepository transactionRepository;
@@ -43,7 +47,6 @@ public class TransactionService {
         if(bookOptional.isEmpty()) {
             throw new BookNotFoundException("Invalid book Id");
         }
-
 
         //now to check whether the book is already issued or not
         Book book = bookOptional.get();
@@ -68,9 +71,23 @@ public class TransactionService {
 
         student.getLibraryCard().getTransactions().add(savedTransaction);
         //save book and student
+        Book savedBook = bookRepository.save(book);
+        Student savedStudent = studentRepository.save(student);
 
-        bookRepository.save(book);
-        studentRepository.save(student);
+        String text = "Dear " + student.getName() + ", you have successfully issued a book\n" +
+                "The transaction details are given below :" +
+                "\nTransaction number : " + savedTransaction.getTransactionNumber() +
+                "\nBook title : " + savedBook.getTitle() +
+                "\nAuthor : " + savedBook.getAuthor() +
+                "\nIssue Date and Time : " + savedTransaction.getTransactionTime();
+
+        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+        simpleMailMessage.setFrom("demoperson206@gmail.com");
+        simpleMailMessage.setTo(savedStudent.getEmail());
+        simpleMailMessage.setSubject("Congrats!! Book Issued");
+        simpleMailMessage.setText(text);
+        javaMailSender.send(simpleMailMessage);
+
 
 
         return IssueBookResponse.builder()
