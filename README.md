@@ -22,9 +22,11 @@ _Admin Panel_: Includes administrative functionalities for managing users, books
 Link [https://github.com/Harsh-git1/LibraryManagementSystem.git](url)
 
 ## Technologies Used
-Java
-Spring Boot
-My sql
+1- Java
+
+2- Spring Boot
+
+3- My sql
 
 
 ## Contributing
