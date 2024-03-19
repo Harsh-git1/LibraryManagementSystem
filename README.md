@@ -1,6 +1,6 @@
 # Library Management System
 
-This is a repository for the Library Management System project developed by Harsh. The Library Management System is a software application designed to help libraries efficiently manage their resources, including books, patrons, and administrative tasks.
+This is a repository for the Library Management System project developed by Harsh. This Library Management System Project contains all the required apis to effortlessly manage student, library card, book, author, and transaction records through simple CRUD operations designed to help libraries efficiently manage their resources.
 
 ## Features
 _User Management_: Allows librarians to create, update, and delete user accounts.
